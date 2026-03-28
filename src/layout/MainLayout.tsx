@@ -1,4 +1,4 @@
-import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
+import { Container, Row, Col, Navbar } from "react-bootstrap";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (

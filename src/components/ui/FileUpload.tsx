@@ -47,17 +47,17 @@ const FileUpload = ({refreshCards}: Props) => {
         formData.append("file", file);
 
         try {
-            await apiRequest(UPLOAD_FILE_END_POINT, {
+            const data = await apiRequest(UPLOAD_FILE_END_POINT, {
                 method: "POST",
                 body: formData,});
             setAlert({
                 type: "success",
-                message: "Upload successful"
+                message: data?.message || "Upload successful"
             })
             refreshCards(); // refresh dashboard
         } catch (err: any) {
             setAlert({
-                type: "success",
+                type: "danger",
                 message: err.message
             })
         }
