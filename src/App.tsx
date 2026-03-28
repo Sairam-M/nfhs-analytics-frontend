@@ -1,5 +1,12 @@
+import MainLayout from "./layout/MainLayout";
+import Dashboard from "./pages/Dashboard";
+
 function App() {
-  return <h1 style={{ color: "red" }}>NFHS Analytics</h1>;
+  return (
+    <MainLayout>
+      <Dashboard />
+    </MainLayout>
+  );
 }
 
 export default App;
