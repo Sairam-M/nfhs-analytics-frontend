@@ -1,7 +1,13 @@
 import TableComponent from "./table"
 import { HIGH_RISK_STATE_COLUMN_NAMES, HIGH_RISK_STATES_FIELDS } from "../../constants"
+import type { HighRiskState } from "../../pages/Dashboard"
 
-const HighRiskStates = ({highRiskStates}) => {
+type Props = {
+    highRiskStates: HighRiskState[]
+}
+
+
+const HighRiskStates = ({highRiskStates}: Props) => {
 
     return (
         <TableComponent 

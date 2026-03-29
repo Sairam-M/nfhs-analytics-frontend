@@ -55,7 +55,7 @@ export const getDemographics = async () => {
     return data.data
 }
 
-export const getStateProfile = async (state) => {
+export const getStateProfile = async (state: string) => {
     const data = await apiRequest(
         GET_STATE_PROFILE_END_POINT + "/" + state, 
         {method: "GET"}
@@ -63,7 +63,7 @@ export const getStateProfile = async (state) => {
     return data
 }
 
-export const getTopNStates = async (n) => {
+export const getTopNStates = async (n: number) => {
     const data = await apiRequest(
         GET_TOP_N_STATES_END_POINT + "?n=" + n, 
         {method: "GET"}

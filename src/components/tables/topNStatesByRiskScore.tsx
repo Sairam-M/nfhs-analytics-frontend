@@ -4,17 +4,20 @@ import { getTopNStates } from "../../services/api";
 import TableComponent from "./table";
 import { TOP_N_STATES_COLUMN_NAMES, TOP_N_STATES_FIELDS } from "../../constants";
 
+type Props = {
+    refresh: boolean;
+    handleRefresh: (value: boolean) => void;
+}
 
-
-const TopNStatesByRiskScore = ({refresh, handleRefresh}) => {
+const TopNStatesByRiskScore = ({refresh, handleRefresh}: Props) => {
 
   const [n,setN] = useState(5)
-  const [topNStates, setTopNStates] = useState({})
+  const [topNStates, setTopNStates] = useState([])
 
-  const handleChange = async (e) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       setN(Number(e.target.value))
       try {
-        const data = await getTopNStates(e.target.value)
+        const data = await getTopNStates(Number(e.target.value))
         setTopNStates(data)
 
       } catch (err: any) {

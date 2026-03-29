@@ -1,16 +1,32 @@
 import { useState } from "react";
 import { Badge, Col, Form, Row } from "react-bootstrap";
 import { getStateProfile } from "../../services/api";
-import { RISK_LEVEL_LOW, RISK_LEVEL_MODERATE } from "../../constants";
+import { RISK_LEVEL_LOW, RISK_LEVEL_MODERATE, type MetricKey } from "../../constants";
 import TableComponent from "../tables/table";
 
+type Props = {
+    states: string[];
+    refreshStates: boolean;
+    updateRefresh: (value: boolean) => void;
+}
 
-const StateProfile = ({states, refreshStates, updateRefresh}) => {
+type Metrics = Record<MetricKey, number>
+
+type StateProfile = {
+  state: string
+  metrics: Metrics
+  risk_category: string
+  reason: string
+  risk_score: number
+  score_band: "Low" | "Moderate" | "High"
+}
+
+const StateProfile = ({states, refreshStates, updateRefresh}: Props) => {
 
     const [state, setState] = useState("")
-    const [stateProfile, setStateProfile] = useState({})
+    const [stateProfile, setStateProfile] = useState<StateProfile | null>(null)
 
-    const onStateSelect = async (e) => {
+    const onStateSelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         setState(e.target.value);
         try {
                 const data = await getStateProfile(e.target.value)
@@ -26,7 +42,7 @@ const StateProfile = ({states, refreshStates, updateRefresh}) => {
     const onRefresh = () => {
         setState("")
         updateRefresh(false)
-        setStateProfile({})
+        setStateProfile(null)
     }
 
     if (refreshStates) {
@@ -36,7 +52,7 @@ const StateProfile = ({states, refreshStates, updateRefresh}) => {
     let kpis = (<div />);
     let metrics = (<div />)
 
-    const riskLevelToBg = (risklevel) => {
+    const riskLevelToBg = (risklevel: string) => {
         if (risklevel == RISK_LEVEL_LOW) {
             return "success"
         }
@@ -48,7 +64,7 @@ const StateProfile = ({states, refreshStates, updateRefresh}) => {
         }
     }
 
-    if (state !== "" && Object.keys(stateProfile).length !== 0) {
+    if (state !== "" && stateProfile !== null) {
 
         const scoreBandBg = riskLevelToBg(stateProfile.score_band)
         const riskCategoryBg = riskLevelToBg(stateProfile.risk_category)
@@ -96,7 +112,7 @@ const StateProfile = ({states, refreshStates, updateRefresh}) => {
         <div>
             <Form.Select value={state} onChange={onStateSelect}>
                 <option value="">Select State</option>
-                {states.map((s) => (
+                {states.map((s: string) => (
                     <option key={s} value={s}>{s}</option>
                 ))}
             </Form.Select>

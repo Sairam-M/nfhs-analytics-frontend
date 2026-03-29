@@ -40,10 +40,7 @@ export const TOP_N_STATES_COLUMN_NAMES = [
            "Child Mortality Rate (%)", "Risk Score (%)","Score Band"
 ]
 
-export const METRICS = [
-     "anemia_women", "bmi_low", "child_mortality_rate", 
-    "female_education_years", "rural_population"
-]
+
 
 export const METRIC_FIELDS_TO_COLUMN_NAMES_MAP = {
     "anemia_women": "Anemia Women (%)" , 
@@ -52,3 +49,10 @@ export const METRIC_FIELDS_TO_COLUMN_NAMES_MAP = {
     "female_education_years": "Female Education (Years)" , 
     "rural_population": "Rural Population (%)"
 }
+
+export type MetricKey = keyof typeof METRIC_FIELDS_TO_COLUMN_NAMES_MAP
+
+export const METRICS: MetricKey[] = [
+     "anemia_women", "bmi_low", "child_mortality_rate", 
+    "female_education_years", "rural_population"
+]

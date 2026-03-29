@@ -1,8 +1,16 @@
 import { Table } from "react-bootstrap"
 
-const TableComponent = ({columns, fields, data}) => {
+type RowData = Record<string, any>
+
+type Props = {
+    columns: string[];
+    fields: string[];
+    data: RowData[]
+}
+
+const TableComponent = ({columns, fields, data}: Props) => {
     const header = columns.map(
-        (item, idx) => (
+        (item:string, idx: number) => (
             <th key={idx}>{item}</th>
         )
     )
@@ -21,10 +29,10 @@ const TableComponent = ({columns, fields, data}) => {
         };
 
     const body = data.map(
-        (item, idx) => (
+        (item: RowData, idx: number) => (
             <tr key={idx}>
                 {fields.map(
-                    (field, idx2) => (
+                    (field: string, idx2: number) => (
                         <td key={idx2}
                             className={
                                 field === "score_band" ? getRiskColor(item[field]) : ""

@@ -1,23 +1,39 @@
 import { useState, useEffect } from "react"
-import { Button, Col, Form, FormGroup, Row } from "react-bootstrap"
-import { METRIC_FIELDS_TO_COLUMN_NAMES_MAP, METRICS } from "../../constants"
+import { Button, Col, Form, Row } from "react-bootstrap"
+import { METRIC_FIELDS_TO_COLUMN_NAMES_MAP, METRICS, type MetricKey } from "../../constants"
 import { getDemographics } from "../../services/api"
 import { CartesianGrid, Scatter, ScatterChart, XAxis, YAxis, Tooltip } from "recharts"
 
-const MetricsScatterPlot = ({refresh, handleRefresh}) => {
-    const [xMetric, setXMetric] = useState("bmi_low")
-    const [yMetric, setYMetric] = useState("child_mortality_rate")
-    const [data, setData] = useState([])
-    const [chartData, setChartData] = useState([])
+type Props = {
+    refresh: boolean;
+    handleRefresh: (value: boolean) => void;
+}
+
+interface DemographicData {
+  state: string
+  [key: string]: number | string
+}
+
+interface ChartData {
+  x: number
+  y: number
+  state: string
+}
+
+const MetricsScatterPlot = ({refresh, handleRefresh}: Props) => {
+    const [xMetric, setXMetric] = useState<MetricKey>("bmi_low")
+    const [yMetric, setYMetric] = useState<MetricKey>("child_mortality_rate")
+    const [data, setData] = useState<DemographicData[]>([])
+    const [chartData, setChartData] = useState<ChartData[]>([])
 
     const handleApply = () => {
-        console.log(xMetric, yMetric)
+        console.log("in apply")
         const covertedData = data.map((item) => {
             return {
-                x: item[xMetric],
-                y: item[yMetric],
-                state: item.state
-            }
+                x: Number(item[xMetric]),
+                y: Number(item[yMetric]),
+                state: item.state as string
+    }
         })
         setChartData(covertedData)
     }
@@ -33,9 +49,17 @@ const MetricsScatterPlot = ({refresh, handleRefresh}) => {
     const loadData = async () => {
             try {
                 const demographicsData = await getDemographics()
-                console.log(demographicsData)
                 setData(demographicsData)
-                handleApply()
+                
+                const covertedData = demographicsData.map((item: DemographicData) => {
+                    return {
+                        x: Number(item[xMetric]),
+                        y: Number(item[yMetric]),
+                        state: item.state as string
+            }
+                })
+                setChartData(covertedData)
+
             } catch (err: any) {
                 console.log(err.message);
             }
@@ -48,7 +72,7 @@ const MetricsScatterPlot = ({refresh, handleRefresh}) => {
     let chart = (<div />)
     if (chartData.length !== 0) {
         console.log(chartData)
-        const CustomTooltip = ({ active, payload }) => {
+        const CustomTooltip = ({ active, payload }: any) => {
                 if (active && payload && payload.length) {
                     const data = payload[0].payload;
 
@@ -65,22 +89,24 @@ const MetricsScatterPlot = ({refresh, handleRefresh}) => {
         };
         chart = (
         <ScatterChart width={400} height={300}>
-                    <CartesianGrid />
-                    <XAxis dataKey="x" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}/>
-                    <YAxis dataKey="y" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric]} />
-                    <Tooltip content={<CustomTooltip />} />
-                    {/* <Tooltip cursor={{ strokeDasharray: "3 3" }} /> */}
-                    <Scatter data={chartData} fill="#8884d8" />
-                </ScatterChart>)
+            <CartesianGrid />
+            <XAxis dataKey="x" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}/>
+            <YAxis dataKey="y" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric]} />
+            <Tooltip content={CustomTooltip} />
+            <Scatter data={chartData} fill="#8884d8" />
+        </ScatterChart>)
     }
 
-    if (refresh) {
-        setChartData([])
-        setData([])
-        loadData()
-        handleApply()
-        handleRefresh(false)
-    }
+    useEffect(() => {
+        if (refresh) {
+            setChartData([])
+            setData([])
+            loadData()
+            handleApply()
+            handleRefresh(false)
+        }
+    }, [refresh])
+    
 
     return (
         <div>
@@ -91,7 +117,7 @@ const MetricsScatterPlot = ({refresh, handleRefresh}) => {
                     <Form.Label>Metric X</Form.Label>
                     <Form.Select
                         value={xMetric}
-                        onChange={(e) => setXMetric(e.target.value)}
+                        onChange={(e) => setXMetric(e.target.value as MetricKey)}
                     >
                         {options}
                     </Form.Select>
@@ -104,7 +130,7 @@ const MetricsScatterPlot = ({refresh, handleRefresh}) => {
                     <Form.Label>Metric Y</Form.Label>
                     <Form.Select
                         value={yMetric}
-                        onChange={(e) => setYMetric(e.target.value)}
+                        onChange={(e) => setYMetric(e.target.value as MetricKey)}
                     >
                     {options}
                     </Form.Select>

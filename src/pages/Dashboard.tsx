@@ -1,22 +1,33 @@
 import { Row, Col, Card, Container } from "react-bootstrap";
 import FileUpload from "../components/ui/FileUpload";
 import { useEffect, useState } from "react";
-import { apiRequest, getStates, getHighRiskStates, getRiskScores, getDemographics  } from "../services/api";
-import { GET_ALL_STATES_END_POINT, GET_DEMOGRPAHICS_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT } from "../constants";
+import { getStates, getHighRiskStates, getRiskScores  } from "../services/api";
 import Demographics from "../components/tables/demographics";
 import StateProfile from "../components/ui/stateProfile";
 import HighRiskStates from "../components/tables/highRiskStates";
 import TopNStatesByRiskScore from "../components/tables/topNStatesByRiskScore";
 import MetricsScatterPlot from "../components/charts/metricsScatterPlot";
 
+type RiskScore = {
+  state: string
+  anemia_women: number
+  bmi_low: number
+  child_mortality_rate: number
+  risk_score: number
+  score_band: "Low" | "Moderate" | "High"
+}
 
-
+export type HighRiskState = {
+  state: string
+  value: number
+  reason: string
+}
 
 const Dashboard = () => {
 
     const [states, setStates] = useState([]);
-    const [highRiskStates, setHighRiskStates] = useState([])
-    const [riskScores, setRiskScores] = useState([])
+    const [highRiskStates, setHighRiskStates] = useState<HighRiskState[]>([])
+    const [riskScores, setRiskScores] = useState<RiskScore[]>([])
     const [refresh, setRefresh] = useState(false)
     const [refreshStates, setRefreshStates] = useState(false)
     const [refreshTopNStates, setRefreshTopNStates] = useState(false)
@@ -114,8 +125,14 @@ const Dashboard = () => {
                     Avg Risk Score
                     </Card.Subtitle>
                     <Card.Title className="mt-2">{
-                            (riskScores.reduce((sum, item) => 
-                                sum + item.risk_score, 0) / riskScores.length).toFixed(2)
+                            riskScores.length > 0
+                                ? (
+                                    riskScores.reduce(
+                                    (sum: number, item: RiskScore) => sum + item.risk_score,
+                                    0
+                                    ) / riskScores.length
+                                ).toFixed(2)
+                                : "0.00"
                         }</Card.Title>
                 </Card.Body>
                 </Card>

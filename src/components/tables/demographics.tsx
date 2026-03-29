@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import { apiRequest, getDemographics } from "../../services/api"
-import { DEMOGRAPICS_COLUMN_NAMES, DEMOGRAPICS_FIELDS, GET_DEMOGRPAHICS_END_POINT } from "../../constants"
+import { getDemographics } from "../../services/api"
+import { DEMOGRAPICS_COLUMN_NAMES, DEMOGRAPICS_FIELDS } from "../../constants"
 import TableComponent from "./table"
 
+type Props = {
+    refreshCard: boolean;
+    updateRefresh: (value: boolean) => void;
+}
 
-
-const Demographics = ({refreshCard, updateRefresh}) => {
+const Demographics = ({refreshCard, updateRefresh}: Props) => {
     const [demographics, setDemographics] = useState([])
 
         useEffect(() => {
