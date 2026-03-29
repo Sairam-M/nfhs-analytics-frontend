@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# 📊 Health Analytics Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Built as a full-stack project (React + FastAPI backend)
 
-Currently, two official plugins are available:
+A React-based dashboard to upload and analyze state-level health data, with interactive visualizations and actionable insights.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Backend API Docs Page - ![Link](https://nfhs-analytics.onrender.com/)
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* 📁 Upload CSV data (health & demographic indicators)
+* 📊 Dashboard summary (total states, high-risk states, avg risk score)
+* 📈 Interactive scatter plot (dynamic X/Y metric selection)
+* 🧭 State profile with key metrics and breakdown
+* ⚠️ High-risk states with contextual reasons
+* 🔝 Top N states by risk score
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* **Frontend:** React (TypeScript), Vite
+* **UI:** React Bootstrap
+* **Charts:** Recharts
+* **Backend:** FastAPI
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📸 UI Preview
+
+### Dashboard Overview
+
+![Dashboard](./assets/dashboard.png)
+
+### Data Tables & Insights
+
+![Tables](./assets/tables.png)
+
+---
+
+## ⚙️ Setup
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Create `.env`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_BASE_URL=http://localhost:8000
 ```
+
+---
+
+## 🧠 Key Design Choices
+
+* Kept state management simple using React hooks (no global state library)
+* Built a reusable table component for multiple data views
+* Used component-level data fetching for modularity
+* Explicit “Apply” action for scatter plot to control re-renders
+
+---
+
+## 📌 Notes
+
+* Dataset is uploaded via CSV
+* Not all states may be present depending on input file
