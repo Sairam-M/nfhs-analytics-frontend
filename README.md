@@ -4,7 +4,8 @@
 
 A React-based dashboard to upload and analyze state-level health data, with interactive visualizations and actionable insights.
 
-Backend API Docs Page - ![Link](https://nfhs-analytics.onrender.com/)
+Backend API Docs Page - 🔗 [Backend API Docs (FastAPI Swagger UI)](https://nfhs-analytics.onrender.com/docs)
+
 ---
 
 ## 🚀 Features
