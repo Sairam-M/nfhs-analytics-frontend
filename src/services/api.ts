@@ -1,4 +1,4 @@
-import { GET_ALL_STATES_END_POINT, GET_DEMOGRPAHICS_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT } from "../constants";
+import { GET_ALL_STATES_END_POINT, GET_DEMOGRPAHICS_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT, GET_STATE_PROFILE_END_POINT, GET_TOP_N_STATES_END_POINT } from "../constants";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -53,4 +53,20 @@ export const getDemographics = async () => {
         {method: "GET"}
     )
     return data.data
+}
+
+export const getStateProfile = async (state) => {
+    const data = await apiRequest(
+        GET_STATE_PROFILE_END_POINT + "/" + state, 
+        {method: "GET"}
+    )
+    return data
+}
+
+export const getTopNStates = async (n) => {
+    const data = await apiRequest(
+        GET_TOP_N_STATES_END_POINT + "?n=" + n, 
+        {method: "GET"}
+    )
+    return data.top_states_by_score
 }

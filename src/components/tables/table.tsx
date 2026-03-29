@@ -7,12 +7,31 @@ const TableComponent = ({columns, fields, data}) => {
         )
     )
 
+    const getRiskColor = (band: string) => {
+        switch (band) {
+            case "Low":
+                return "text-success";
+            case "Moderate":
+                return "text-warning";
+            case "High":
+                return "text-danger";
+            default:
+                return "";
+        }
+        };
+
     const body = data.map(
         (item, idx) => (
             <tr key={idx}>
                 {fields.map(
                     (field, idx2) => (
-                        <td key={idx2}>{item[field]}</td>
+                        <td key={idx2}
+                            className={
+                                field === "score_band" ? getRiskColor(item[field]) : ""
+                                }
+                        >
+                            {item[field]}
+                        </td>
                     )
                 )}
             </tr>

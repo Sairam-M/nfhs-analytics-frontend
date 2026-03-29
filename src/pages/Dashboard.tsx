@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { apiRequest, getStates, getHighRiskStates, getRiskScores, getDemographics  } from "../services/api";
 import { GET_ALL_STATES_END_POINT, GET_DEMOGRPAHICS_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT } from "../constants";
 import Demographics from "../components/tables/demographics";
+import StateProfile from "../components/ui/stateProfile";
+import HighRiskStates from "../components/tables/highRiskStates";
+import TopNStatesByRiskScore from "../components/tables/topNStatesByRiskScore";
+import MetricsScatterPlot from "../components/charts/metricsScatterPlot";
 
 
 
@@ -14,7 +18,9 @@ const Dashboard = () => {
     const [highRiskStates, setHighRiskStates] = useState([])
     const [riskScores, setRiskScores] = useState([])
     const [refresh, setRefresh] = useState(false)
-    
+    const [refreshStates, setRefreshStates] = useState(false)
+    const [refreshTopNStates, setRefreshTopNStates] = useState(false)
+    const [refreshScatterChart, setRefreshScatterChart] = useState(false)
     
 
     const refreshCards = async () => {
@@ -121,6 +127,37 @@ const Dashboard = () => {
                         <Card className="shadow-sm">
                             <Card.Body>
                                 <Card.Subtitle className="text-muted">
+                                    Scatter Plot
+                                </Card.Subtitle>
+                                <MetricsScatterPlot 
+                                    refresh={refreshScatterChart}
+                                    handleRefresh={setRefreshScatterChart}
+                                />
+                            </Card.Body>
+                        </Card>
+                </Col>
+                <Col md={6}>
+                        <Card className="shadow-sm">
+                            <Card.Body>
+                                <Card.Subtitle className="text-muted">
+                                State Profile
+                                </Card.Subtitle>
+                                <br />
+                                <StateProfile 
+                                    states={states}
+                                    refreshStates={refreshStates}
+                                    updateRefresh={setRefreshStates}
+                                />
+                            </Card.Body>
+                        </Card>
+                </Col>
+            </Row>
+            <br />
+            <Row>
+                <Col md={6}>
+                        <Card className="shadow-sm">
+                            <Card.Body>
+                                <Card.Subtitle className="text-muted">
                                 Demographics
                                 </Card.Subtitle>
                                 <br />
@@ -132,50 +169,47 @@ const Dashboard = () => {
                         </Card>
                 </Col>
                 <Col md={6}>
-                        <Card className="shadow-sm">
-                            <Card.Body>
-                                <Card.Subtitle className="text-muted">
-                                State Profile
-                                </Card.Subtitle>
-                            </Card.Body>
+                        <Row>
+                            <Card className="shadow-sm">
+                                <Card.Body>
+                                    <Card.Subtitle className="text-muted">
+                                    High Risk States
+                                    </Card.Subtitle>
+                                    <br/>
+                                    <HighRiskStates 
+                                        highRiskStates={highRiskStates}
+                                    />
+                                </Card.Body>
                         </Card>
+                        </Row>
+                        <br />
+                        <Row>
+                            <Card className="shadow-sm">
+                                <Card.Body>
+                                    <Card.Subtitle className="text-muted">
+                                    Top N States by Risk Score
+                                    </Card.Subtitle>
+                                    <br />
+                                    <TopNStatesByRiskScore
+                                        refresh={refreshTopNStates}
+                                        handleRefresh={setRefreshTopNStates}
+                                    />
+                                </Card.Body>
+                            </Card>
+                            
+                        </Row>
+                        
                 </Col>
             </Row>
             <br />
-            <Row>
-                <Col md={6}>
-                        <Card className="shadow-sm">
-                            <Card.Body>
-                                <Card.Subtitle className="text-muted">
-                                High Risk States
-                                </Card.Subtitle>
-                            </Card.Body>
-                        </Card>
-                </Col>
-                <Col md={6}>
-                        <Card className="shadow-sm">
-                            <Card.Body>
-                                <Card.Subtitle className="text-muted">
-                                Top N States by Risk Score
-                                </Card.Subtitle>
-                            </Card.Body>
-                        </Card>
-                </Col>
-            </Row>
-            <br />
-            <Row>
+            
+            {/* <Row>
                 <Col md={3} />
                 <Col md={6}>
-                        <Card className="shadow-sm">
-                            <Card.Body>
-                                <Card.Subtitle className="text-muted">
-                                    Scatter Plot
-                                </Card.Subtitle>
-                            </Card.Body>
-                        </Card>
+                        
                 </Col>
                 <Col md={3} />
-            </Row>
+            </Row> */}
         </Container>
         
     );
