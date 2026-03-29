@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Form, Row, Col, Button, Alert } from "react-bootstrap"
 import { apiRequest } from "../../services/api";
-import { UPLOAD_FILE_END_POINT } from "../../constants";
+import { DEMOGRAPICS_FIELDS, UPLOAD_FILE_END_POINT } from "../../constants";
 
 type Props = {
     refreshCards: () => void;
@@ -79,7 +79,7 @@ const FileUpload = ({refreshCards}: Props) => {
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formFileLg" className="mb-3" >
                     <Form.Label><b>Upload CSV File</b> <br></br>
-                        <i>(<b>Fields:</b> state, anemia_women, bmi_low, child_mortality_rate, female_education_years, rural_population)</i>
+                        <i>(<b>Fields:</b> {DEMOGRAPICS_FIELDS.join(", ")})</i>
                     </Form.Label>
                     <Row>
                         <Col md={10}>  

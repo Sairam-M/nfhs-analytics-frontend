@@ -1,43 +1,32 @@
 import { Row, Col, Card, Container } from "react-bootstrap";
 import FileUpload from "../components/ui/FileUpload";
 import { useEffect, useState } from "react";
-import { apiRequest } from "../services/api";
-import { GET_ALL_STATES_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT } from "../constants";
+import { apiRequest, getStates, getHighRiskStates, getRiskScores, getDemographics  } from "../services/api";
+import { GET_ALL_STATES_END_POINT, GET_DEMOGRPAHICS_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT } from "../constants";
 import Demographics from "../components/tables/demographics";
 
 
-const getStates = async () => {
-    const data = await apiRequest(GET_ALL_STATES_END_POINT, {
-        method: "GET"});
-    return data.states
-}
 
-const getHighRiskStates = async () => {
-    const data = await apiRequest(GET_HIGH_RISK_STATES_END_POINT, {
-            method: "GET"});
-    return data.high_risk_states
-}
-
-const getRiskScores = async () => {
-    const data = await apiRequest(GET_RISK_SCORES_END_POINT, {
-        method: "GET"
-    });
-    return data.risk_scores
-}
 
 const Dashboard = () => {
 
     const [states, setStates] = useState([]);
     const [highRiskStates, setHighRiskStates] = useState([])
     const [riskScores, setRiskScores] = useState([])
+    const [refresh, setRefresh] = useState(false)
+    
     
 
     const refreshCards = async () => {
         try {
-            const [statesData, highRiskData, riskData] = await Promise.all([
-                getStates(),
-                getHighRiskStates(),
-                getRiskScores()
+            const [
+                statesData, 
+                highRiskData, 
+                riskData
+            ] = await Promise.all([
+                    getStates(),
+                    getHighRiskStates(),
+                    getRiskScores(),
             ]);
 
             setStates(statesData);
@@ -52,10 +41,14 @@ const Dashboard = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [statesData, highRiskData, risksData] = await Promise.all([
+                const [
+                    statesData,
+                    highRiskData, 
+                    risksData,
+                ] = await Promise.all([
                     getStates(),
                     getHighRiskStates(),
-                    getRiskScores()
+                    getRiskScores(),
                 ]);
 
                 setStates(statesData);
@@ -69,9 +62,6 @@ const Dashboard = () => {
 
         loadData();
     }, []);
-
-
-    // onLoad(setStates, setHighRiskStates);
 
     return (
         <Container fluid>
@@ -133,7 +123,11 @@ const Dashboard = () => {
                                 <Card.Subtitle className="text-muted">
                                 Demographics
                                 </Card.Subtitle>
-                                <Demographics />
+                                <br />
+                                <Demographics 
+                                    refreshCard={refresh}
+                                    updateRefresh={setRefresh}
+                                />
                             </Card.Body>
                         </Card>
                 </Col>

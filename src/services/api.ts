@@ -1,3 +1,5 @@
+import { GET_ALL_STATES_END_POINT, GET_DEMOGRPAHICS_END_POINT, GET_HIGH_RISK_STATES_END_POINT, GET_RISK_SCORES_END_POINT } from "../constants";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const apiRequest = async (
@@ -25,3 +27,30 @@ export const apiRequest = async (
     throw new Error(err.message || "Network error");
   }
 };
+
+export const getStates = async () => {
+    const data = await apiRequest(GET_ALL_STATES_END_POINT, {
+        method: "GET"});
+    return data.states
+}
+
+export const getHighRiskStates = async () => {
+    const data = await apiRequest(GET_HIGH_RISK_STATES_END_POINT, {
+            method: "GET"});
+    return data.high_risk_states
+}
+
+export const getRiskScores = async () => {
+    const data = await apiRequest(GET_RISK_SCORES_END_POINT, {
+        method: "GET"
+    });
+    return data.risk_scores
+}
+
+export const getDemographics = async () => {
+    const data = await apiRequest(
+        GET_DEMOGRPAHICS_END_POINT, 
+        {method: "GET"}
+    )
+    return data.data
+}
