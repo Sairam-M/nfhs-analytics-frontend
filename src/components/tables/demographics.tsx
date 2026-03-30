@@ -4,11 +4,10 @@ import { DEMOGRAPICS_COLUMN_NAMES, DEMOGRAPICS_FIELDS } from "../../constants"
 import TableComponent from "./table"
 
 type Props = {
-    refreshCard: boolean;
-    updateRefresh: (value: boolean) => void;
+    refreshCard: number;
 }
 
-const Demographics = ({refreshCard, updateRefresh}: Props) => {
+const Demographics = ({refreshCard}: Props) => {
     const [demographics, setDemographics] = useState([])
 
         useEffect(() => {
@@ -37,16 +36,16 @@ const Demographics = ({refreshCard, updateRefresh}: Props) => {
                 ]);
     
                 setDemographics(demographicsData)
-                updateRefresh(false)
     
             } catch (err: any) {
                 console.log(err.message);
             }
         }
 
-        if (refreshCard) {
+        useEffect(() => {
             refreshCards()
-        }
+        }, [refreshCard])
+        
 
     return (
     <TableComponent 

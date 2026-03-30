@@ -5,11 +5,10 @@ import TableComponent from "./table";
 import { TOP_N_STATES_COLUMN_NAMES, TOP_N_STATES_FIELDS } from "../../constants";
 
 type Props = {
-    refresh: boolean;
-    handleRefresh: (value: boolean) => void;
+    refresh: number;
 }
 
-const TopNStatesByRiskScore = ({refresh, handleRefresh}: Props) => {
+const TopNStatesByRiskScore = ({refresh}: Props) => {
 
   const [n,setN] = useState(5)
   const [topNStates, setTopNStates] = useState([])
@@ -37,10 +36,9 @@ const TopNStatesByRiskScore = ({refresh, handleRefresh}: Props) => {
 
   useEffect(()=>{  getTopDefault()},[])
   
-  if (refresh) {
-      getTopDefault()
-      handleRefresh(false)
-  }
+  useEffect(() => {
+    getTopDefault()
+  }, [refresh])
 
 
   const form = (

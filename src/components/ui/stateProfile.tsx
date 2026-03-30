@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Col, Form, Row } from "react-bootstrap";
 import { getStateProfile } from "../../services/api";
 import { RISK_LEVEL_LOW, RISK_LEVEL_MODERATE, type MetricKey } from "../../constants";
@@ -6,8 +6,7 @@ import TableComponent from "../tables/table";
 
 type Props = {
     states: string[];
-    refreshStates: boolean;
-    updateRefresh: (value: boolean) => void;
+    refreshStates: number;
 }
 
 type Metrics = Record<MetricKey, number>
@@ -21,7 +20,7 @@ type StateProfile = {
   score_band: "Low" | "Moderate" | "High"
 }
 
-const StateProfile = ({states, refreshStates, updateRefresh}: Props) => {
+const StateProfile = ({states, refreshStates}: Props) => {
 
     const [state, setState] = useState("")
     const [stateProfile, setStateProfile] = useState<StateProfile | null>(null)
@@ -41,13 +40,14 @@ const StateProfile = ({states, refreshStates, updateRefresh}: Props) => {
 
     const onRefresh = () => {
         setState("")
-        updateRefresh(false)
         setStateProfile(null)
     }
 
-    if (refreshStates) {
+    useEffect(()=>{
         onRefresh()
-    }
+    }, [refreshStates])
+
+    
 
     let kpis = (<div />);
     let metrics = (<div />)

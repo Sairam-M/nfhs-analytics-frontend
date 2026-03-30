@@ -5,8 +5,7 @@ import { getDemographics } from "../../services/api"
 import { CartesianGrid, Scatter, ScatterChart, XAxis, YAxis, Tooltip } from "recharts"
 
 type Props = {
-    refresh: boolean;
-    handleRefresh: (value: boolean) => void;
+    refresh: number;
 }
 
 interface DemographicData {
@@ -20,7 +19,7 @@ interface ChartData {
   state: string
 }
 
-const MetricsScatterPlot = ({refresh, handleRefresh}: Props) => {
+const MetricsScatterPlot = ({refresh}: Props) => {
     const [xMetric, setXMetric] = useState<MetricKey>("bmi_low")
     const [yMetric, setYMetric] = useState<MetricKey>("child_mortality_rate")
     const [data, setData] = useState<DemographicData[]>([])
@@ -98,13 +97,9 @@ const MetricsScatterPlot = ({refresh, handleRefresh}: Props) => {
     }
 
     useEffect(() => {
-        if (refresh) {
-            setChartData([])
-            setData([])
-            loadData()
-            handleApply()
-            handleRefresh(false)
-        }
+        setChartData([])
+        setData([])
+        loadData()
     }, [refresh])
     
 

@@ -28,10 +28,10 @@ const Dashboard = () => {
     const [states, setStates] = useState([]);
     const [highRiskStates, setHighRiskStates] = useState<HighRiskState[]>([])
     const [riskScores, setRiskScores] = useState<RiskScore[]>([])
-    const [refresh, setRefresh] = useState(false)
-    const [refreshStates, setRefreshStates] = useState(false)
-    const [refreshTopNStates, setRefreshTopNStates] = useState(false)
-    const [refreshScatterChart, setRefreshScatterChart] = useState(false)
+    const [refresh, setRefresh] = useState(0)
+    const [refreshStates, setRefreshStates] = useState(0)
+    const [refreshTopNStates, setRefreshTopNStates] = useState(0)
+    const [refreshScatterChart, setRefreshScatterChart] = useState(0)
     
 
     const refreshCards = async () => {
@@ -49,6 +49,10 @@ const Dashboard = () => {
             setStates(statesData);
             setHighRiskStates(highRiskData);
             setRiskScores(riskData)
+            setRefresh(prev => prev + 1)
+            setRefreshStates(prev => prev + 1)
+            setRefreshTopNStates(prev => prev + 1)
+            setRefreshScatterChart(prev => prev + 1)
 
         } catch (err: any) {
             console.log(err.message);
@@ -148,7 +152,6 @@ const Dashboard = () => {
                                 </Card.Subtitle>
                                 <MetricsScatterPlot 
                                     refresh={refreshScatterChart}
-                                    handleRefresh={setRefreshScatterChart}
                                 />
                             </Card.Body>
                         </Card>
@@ -163,7 +166,6 @@ const Dashboard = () => {
                                 <StateProfile 
                                     states={states}
                                     refreshStates={refreshStates}
-                                    updateRefresh={setRefreshStates}
                                 />
                             </Card.Body>
                         </Card>
@@ -180,7 +182,6 @@ const Dashboard = () => {
                                 <br />
                                 <Demographics 
                                     refreshCard={refresh}
-                                    updateRefresh={setRefresh}
                                 />
                             </Card.Body>
                         </Card>
@@ -209,7 +210,6 @@ const Dashboard = () => {
                                     <br />
                                     <TopNStatesByRiskScore
                                         refresh={refreshTopNStates}
-                                        handleRefresh={setRefreshTopNStates}
                                     />
                                 </Card.Body>
                             </Card>
