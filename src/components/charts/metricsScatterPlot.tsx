@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Button, Col, Form, Row } from "react-bootstrap"
 import { METRIC_FIELDS_TO_COLUMN_NAMES_MAP, METRICS, type MetricKey } from "../../constants"
 import { getDemographics } from "../../services/api"
-import { CartesianGrid, Scatter, ScatterChart, XAxis, YAxis, Tooltip } from "recharts"
+import { CartesianGrid, Scatter, ScatterChart, XAxis, YAxis, Tooltip, Label } from "recharts"
 
 type Props = {
     refresh: number;
@@ -24,10 +24,14 @@ const MetricsScatterPlot = ({refresh}: Props) => {
     const [yMetric, setYMetric] = useState<MetricKey>("child_mortality_rate")
     const [data, setData] = useState<DemographicData[]>([])
     const [chartData, setChartData] = useState<ChartData[]>([])
+    const [xLabel, setXLabel] = useState("")
+    const [yLabel, setYLabel] = useState("")
 
     const handleApply = () => {
-        console.log("in apply")
-        const covertedData = data.map((item) => {
+        const filteredData = data.filter((item: DemographicData) => {
+                    return item[xMetric] !== null && item[yMetric] !== null
+                })
+        const covertedData = filteredData.map((item) => {
             return {
                 x: Number(item[xMetric]),
                 y: Number(item[yMetric]),
@@ -35,6 +39,8 @@ const MetricsScatterPlot = ({refresh}: Props) => {
     }
         })
         setChartData(covertedData)
+        setXLabel(METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric])
+        setYLabel(METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric])
     }
 
     const options = METRICS.map((item, idx) => {
@@ -50,7 +56,10 @@ const MetricsScatterPlot = ({refresh}: Props) => {
                 const demographicsData = await getDemographics()
                 setData(demographicsData)
                 
-                const covertedData = demographicsData.map((item: DemographicData) => {
+                const filteredData = demographicsData.filter((item: DemographicData) => {
+                    return item[xMetric] !== null && item[yMetric] !== null
+                })
+                const covertedData = filteredData.map((item: DemographicData) => {
                     return {
                         x: Number(item[xMetric]),
                         y: Number(item[yMetric]),
@@ -58,6 +67,8 @@ const MetricsScatterPlot = ({refresh}: Props) => {
             }
                 })
                 setChartData(covertedData)
+                setXLabel(METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric])
+                setYLabel(METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric])
 
             } catch (err: any) {
                 console.log(err.message);
@@ -70,7 +81,6 @@ const MetricsScatterPlot = ({refresh}: Props) => {
 
     let chart = (<div />)
     if (chartData.length !== 0) {
-        console.log(chartData)
         const CustomTooltip = ({ active, payload }: any) => {
                 if (active && payload && payload.length) {
                     const data = payload[0].payload;
@@ -87,13 +97,18 @@ const MetricsScatterPlot = ({refresh}: Props) => {
             return null;
         };
         chart = (
-        <ScatterChart width={400} height={300}>
-            <CartesianGrid />
-            <XAxis dataKey="x" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}/>
-            <YAxis dataKey="y" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric]} />
-            <Tooltip content={CustomTooltip} />
-            <Scatter data={chartData} fill="#8884d8" />
-        </ScatterChart>)
+                <ScatterChart width={400} height={300}>
+                    <CartesianGrid />
+                    <XAxis dataKey="x" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}>
+                        <Label value={xLabel} offset={0} position="insideBottom" />
+                    </XAxis>
+                    <YAxis dataKey="y" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric]} >
+                        <Label value={yLabel} angle={-90} style={{ textAnchor: 'middle' }}   position="insideLeft" />
+                    </YAxis>
+                    <Tooltip content={CustomTooltip} />
+                    <Scatter data={chartData} fill="#8884d8" />
+                </ScatterChart>
+        )
     }
 
     useEffect(() => {
@@ -145,7 +160,12 @@ const MetricsScatterPlot = ({refresh}: Props) => {
             </Row>
             <br />
             <Row>
-                {chart}
+                <Col md={1} />
+                <Col md={10}>
+                    {chart}
+                </Col>
+                <Col md={1} />
+                
             </Row>
         </div>
 

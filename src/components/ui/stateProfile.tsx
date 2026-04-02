@@ -53,6 +53,9 @@ const StateProfile = ({states, refreshStates}: Props) => {
     let metrics = (<div />)
 
     const riskLevelToBg = (risklevel: string) => {
+        if (risklevel === null) {
+            return undefined
+        }
         if (risklevel == RISK_LEVEL_LOW) {
             return "success"
         }
@@ -73,17 +76,17 @@ const StateProfile = ({states, refreshStates}: Props) => {
             <Row className="text-center mt-3">
                 <Col>
                     <div className="fw-light text-muted">Risk Score</div>
-                    <div className="fs-4 fw-bold">{stateProfile.risk_score}</div>
+                    <div className="fs-4 fw-bold">{stateProfile.risk_score ? stateProfile.risk_score : "N.A." }</div>
                 </Col>
 
                 <Col>
                     <div className="fw-light text-muted">Score Band</div>
-                    <Badge bg={scoreBandBg}>{stateProfile.score_band}</Badge>
+                    <Badge bg={scoreBandBg}>{stateProfile.score_band ? stateProfile.score_band : "N.A."}</Badge>
                 </Col>
 
                 <Col>
                     <div className="fw-light text-muted">Risk Category</div>
-                    <Badge bg={riskCategoryBg}>{stateProfile.risk_category}</Badge>
+                    <Badge bg={riskCategoryBg}>{stateProfile.risk_category ? stateProfile.risk_category : "N.A."}</Badge>
                 </Col>
             </Row>
 
