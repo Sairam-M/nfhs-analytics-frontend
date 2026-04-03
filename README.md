@@ -4,6 +4,8 @@
 
 A React-based dashboard to upload and analyze state-level health data, with interactive visualizations and actionable insights.
 
+Link to Application deployed in Vercel - 🔗 [Web App)](https://nfhs-analytics-frontend-vercel.vercel.app/)
+
 Backend API Docs Page - 🔗 [Backend API Docs (FastAPI Swagger UI)](https://nfhs-analytics.onrender.com/docs)
 
 ---
