@@ -31,6 +31,7 @@ const MetricsScatterPlot = ({refresh}: Props) => {
         const filteredData = data.filter((item: DemographicData) => {
                     return item[xMetric] !== null && item[yMetric] !== null
                 })
+        
         const covertedData = filteredData.map((item) => {
             return {
                 x: Number(item[xMetric]),
@@ -99,10 +100,10 @@ const MetricsScatterPlot = ({refresh}: Props) => {
         chart = (
                 <ScatterChart width={400} height={300}>
                     <CartesianGrid />
-                    <XAxis dataKey="x" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}>
+                    <XAxis dataKey="x"  type="number" domain={['auto', 'auto']} name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}>
                         <Label value={xLabel} offset={0} position="insideBottom" />
                     </XAxis>
-                    <YAxis dataKey="y" name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric]} >
+                    <YAxis dataKey="y"  type="number" domain={['auto', 'auto']} name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[yMetric]} >
                         <Label value={yLabel} angle={-90} style={{ textAnchor: 'middle' }}   position="insideLeft" />
                     </YAxis>
                     <Tooltip content={CustomTooltip} />
