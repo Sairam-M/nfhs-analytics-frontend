@@ -14,6 +14,7 @@ const FileUpload = ({refreshCards}: Props) => {
         type: "success" | "danger";
         message: string;
         } | null>(null);
+    const [show, setShow] = useState<boolean>(true);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0] || null;
@@ -72,9 +73,21 @@ const FileUpload = ({refreshCards}: Props) => {
                             {alert.message}
                         </Alert>
                         )
+    
+    const note = show && (
+                    <Alert
+                            variant={"primary"}
+                            onClose={() => setShow(false)}
+                            dismissible
+                        >
+                            {"Note: The backend services hosted on Render takes 1-2mins to get started (Thanks to Free tier!)"}
+                            {" So, Thank you for your patience in advance! :)"}
+                    </Alert>
+                )
 
     return (
         <div>
+            {note}
             {alertUI}
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formFileLg" className="mb-3" >
