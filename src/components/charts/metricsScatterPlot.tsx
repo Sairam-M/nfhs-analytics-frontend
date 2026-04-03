@@ -98,7 +98,8 @@ const MetricsScatterPlot = ({refresh}: Props) => {
             return null;
         };
         chart = (
-                <ScatterChart width={400} height={300}>
+            <div style={{  overflowX: "auto" }}>
+                    <ScatterChart width={400} height={300}>
                     <CartesianGrid />
                     <XAxis dataKey="x"  type="number" domain={['auto', 'auto']} name={METRIC_FIELDS_TO_COLUMN_NAMES_MAP[xMetric]}>
                         <Label value={xLabel} offset={0} position="insideBottom" />
@@ -109,6 +110,8 @@ const MetricsScatterPlot = ({refresh}: Props) => {
                     <Tooltip content={CustomTooltip} />
                     <Scatter data={chartData} fill="#8884d8" />
                 </ScatterChart>
+            </div>
+                
         )
     }
 

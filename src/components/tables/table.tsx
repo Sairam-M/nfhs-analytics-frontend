@@ -47,16 +47,19 @@ const TableComponent = ({columns, fields, data}: Props) => {
     )
 
     return (
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    {header}
-                </tr>
-            </thead>
-            <tbody>
-                {body}
-            </tbody>
-        </Table>
+        <div style={{ overflowX: "auto" }}>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        {header}
+                    </tr>
+                </thead>
+                <tbody>
+                    {body}
+                </tbody>
+            </Table>
+        </div>
+        
     )
 }
 
